@@ -1,3 +1,6 @@
+let humanScore = 0;
+let computerScore = 0;
+
 // Return a random integer value from 1 to upperBound
 function getRandomInteger(upperBound)
 {
@@ -22,12 +25,12 @@ function getChoice(choiceIndex)
 // Return computer's choice
 function getComputerChoice()
 {
-    return getChoice(choiceIndex);
+    return getChoice(getRandomInteger(3));
 }
-
+// Return user's choice based on provided input
 function getHumanChoice()
 {
-    let choiceIndex = Number(prompt("Please enter your choice:\n1 - Rock\n2 - Paper\n3-Scissors", 1));
+    let choiceIndex = Number(prompt("Please enter your choice:\n1) Rock\n2) Paper\n3) Scissors", 1));
     return getChoice(choiceIndex);
 }
 
