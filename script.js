@@ -25,7 +25,8 @@ function getChoice(choiceIndex)
 // Return computer's choice
 function getComputerChoice()
 {
-    return getChoice(getRandomInteger(3));
+    let choiceIndex = getRandomInteger(3);
+    return getChoice(choiceIndex);
 }
 // Return user's choice based on provided input
 function getHumanChoice()
@@ -34,5 +35,35 @@ function getHumanChoice()
     return getChoice(choiceIndex);
 }
 
-console.log(getHumanChoice());
+function getRoundResult(humanChoice, computerChoice)
+{
+    if (humanChoice === "Rock")
+    {
+        return rockCase(computerChoice);
+    }
+}
+
+function rockCase(computerChoice)
+{
+    if (computerChoice === "Paper")
+    {
+        return "lose";
+    }
+    else if (computerChoice === "Scissors")
+    {
+        return "won";
+    }
+    else
+    {
+        return "tie";
+    }
+}
+
+function playRound(humanChoice, computerChoice)
+{
+    let result = "";
+    
+}
+
+
 
