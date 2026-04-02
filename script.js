@@ -41,6 +41,10 @@ function getRoundResult(humanChoice, computerChoice)
     {
         return rockCase(computerChoice);
     }
+    else if (humanChoice === "Paper")
+    {
+        return paperCase(computerChoice);
+    }
 }
 
 function rockCase(computerChoice)
@@ -52,6 +56,22 @@ function rockCase(computerChoice)
     else if (computerChoice === "Scissors")
     {
         return "won";
+    }
+    else
+    {
+        return "tie";
+    }
+}
+
+function paperCase(computerChoice)
+{
+    if (computerChoice === "Rock")
+    {
+        return "won";
+    }
+    else if (computerChoice === "Scissors")
+    {
+        return "lose";
     }
     else
     {
