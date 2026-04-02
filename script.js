@@ -63,15 +63,32 @@ function generalCase(computerChoice, winningCase, losingCase)
     }
     else
     {
-        return "tie";
+        return "tied";
     }
 }
 
+function getRoundMessage(result, humanChoice, computerChoice)
+{
+    let message = `You {result}! `;
+    if (result === "won")
+    {
+        message.concat(`{humanChoice} beats {computerChoice}.\n`);
+    }
+    else if (result === "lose")
+    {
+        message.concat(`{computerChoice} beats {humanChoice}.\n`);
+    }
+    else
+    {
+        message.concat(`You both chose {humanChoice}.\n`);
+    }
+}
 
 function playRound(humanChoice, computerChoice)
 {
     let result = getRoundResult(humanChoice, computerChoice);
-    let roundMessage = getRoundMessage(result);
+    let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
+
 }
 
 
