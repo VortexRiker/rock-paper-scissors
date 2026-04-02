@@ -69,18 +69,32 @@ function generalCase(computerChoice, winningCase, losingCase)
 
 function getRoundMessage(result, humanChoice, computerChoice)
 {
-    let message = `You {result}! `;
+    let message = `You ${result}! `;
     if (result === "won")
     {
-        message.concat(`{humanChoice} beats {computerChoice}.\n`);
+        message = message.concat(`${humanChoice} beats ${computerChoice}.\n`);
     }
     else if (result === "lose")
     {
-        message.concat(`{computerChoice} beats {humanChoice}.\n`);
+        message = message.concat(`${computerChoice} beats ${humanChoice}.\n`);
     }
     else
     {
-        message.concat(`You both chose {humanChoice}.\n`);
+        message = message.concat(`Both chose ${humanChoice}.\n`);
+    }
+
+    return message;
+}
+
+function setScore(result)
+{
+    if (result === "won")
+    {
+        ++humanScore;
+    }
+    else if (result === "lose")
+    {
+        ++computerScore;
     }
 }
 
@@ -88,8 +102,14 @@ function playRound(humanChoice, computerChoice)
 {
     let result = getRoundResult(humanChoice, computerChoice);
     let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
-
+    setScore(result);
+    console.log(roundMessage);
 }
+
+const humanSelection = getHumanChoice();
+const computerSelection = getComputerChoice();
+
+playRound(humanSelection, computerSelection);
 
 
 
