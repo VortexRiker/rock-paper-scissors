@@ -39,37 +39,25 @@ function getRoundResult(humanChoice, computerChoice)
 {
     if (humanChoice === "Rock")
     {
-        return rockCase(computerChoice);
+        return generalCase(computerChoice, "Scissors", "Paper");
     }
     else if (humanChoice === "Paper")
     {
-        return paperCase(computerChoice);
-    }
-}
-
-function rockCase(computerChoice)
-{
-    if (computerChoice === "Paper")
-    {
-        return "lose";
-    }
-    else if (computerChoice === "Scissors")
-    {
-        return "won";
+        return generalCase(computerChoice, "Rock", "Scissors");
     }
     else
     {
-        return "tie";
+        return generalCase(computerChoice, "Paper", "Rock");
     }
 }
 
-function paperCase(computerChoice)
+function generalCase(computerChoice, winningCase, losingCase)
 {
-    if (computerChoice === "Rock")
+    if (computerChoice === winningCase)
     {
         return "won";
     }
-    else if (computerChoice === "Scissors")
+    else if (computerChoice === losingCase)
     {
         return "lose";
     }
@@ -78,11 +66,12 @@ function paperCase(computerChoice)
         return "tie";
     }
 }
+
 
 function playRound(humanChoice, computerChoice)
 {
-    let result = "";
-    
+    let result = getRoundResult(humanChoice, computerChoice);
+    let roundMessage = getRoundMessage(result);
 }
 
 
