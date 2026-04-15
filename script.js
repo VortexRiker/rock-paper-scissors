@@ -155,5 +155,3 @@ function playGame(numberOfRounds)
 }
 
 playGame(NUMBER_OF_ROUNDS);
-
-
