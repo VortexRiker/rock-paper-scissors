@@ -33,6 +33,7 @@ function getHumanChoice()
     let choiceIndex = Number(prompt("Please enter your choice:\n1) Rock\n2) Paper\n3) Scissors", 1));
     return getChoice(choiceIndex);
 }
+
 // Return a word corresponding to round result(win, lose, tie)
 function getRoundResult(humanChoice, computerChoice)
 {
@@ -91,67 +92,76 @@ function getRoundMessage(result, humanChoice, computerChoice)
     return message;
 }
 
-// Play game of "Rock Paper Scissors" against computer
-// Consisting of numberOfRounds rounds specified by the caller
-function playGame(numberOfRounds)
+// Play 1 round of game
+function playRound(humanChoice, computerChoice)
 {
-    let humanScore = 0;
-    let computerScore = 0;
-
-    // Increment score based on round result string
-    function setScore(result)
-    {
-        if (result === "won")
-        {
-            ++humanScore;
-        }
-        else if (result === "lose")
-        {
-            ++computerScore;
-        }
-    }
-
-    // Play 1 round of game
-    function playRound(humanChoice, computerChoice)
-    {
-        let result = getRoundResult(humanChoice, computerChoice);
-        let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
-        setScore(result);
-        console.log(roundMessage);
-    }
-    // Play numberOfRounds rounds of game
-    // Just a wrapper around the loop
-    function playNumberOfRounds(numbeOfRounds)
-    {
-        for (let i = 0; i < numberOfRounds; ++i)
-        {
-            const humanSelection = getHumanChoice();
-            const computerSelection = getComputerChoice();
-
-            playRound(humanSelection, computerSelection);
-        }
-    }
-    // Show final result message 
-    // based on the scores at the end of the game
-    function declareAWinner()
-    {
-        if (humanScore > computerScore)
-        {
-            console.log("Congratulations! You won!");
-        }
-        else if (humanScore < computerScore)
-        {
-            console.log("You lost. Better luck next time!");
-        }
-        else
-        {
-            console.log("We have a tie!")
-        }
-        console.log(`Your score was ${humanScore}.`);
-    }
-
-    playNumberOfRounds(numberOfRounds);
-    declareAWinner();
+    let result = getRoundResult(humanChoice, computerChoice);
+    let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
+    //setScore(result);
+    console.log(roundMessage);
 }
 
-playGame(NUMBER_OF_ROUNDS);
+const choices = document.querySelectorAll(".choice");
+const humanAnswers = [ "Rock", "Paper", "Scissors"];
+for(let i = 0; i < choices.length; ++i)
+{
+    choices[i].addEventListener("click",() => playRound(humanAnswers[i], getComputerChoice()));
+}
+
+// // Play game of "Rock Paper Scissors" against computer
+// // Consisting of numberOfRounds rounds specified by the caller
+// function playGame(numberOfRounds)
+// {
+//     let humanScore = 0;
+//     let computerScore = 0;
+
+//     // Increment score based on round result string
+//     function setScore(result)
+//     {
+//         if (result === "won")
+//         {
+//             ++humanScore;
+//         }
+//         else if (result === "lose")
+//         {
+//             ++computerScore;
+//         }
+//     }
+
+
+//     // Play numberOfRounds rounds of game
+//     // Just a wrapper around the loop
+//     function playNumberOfRounds(numbeOfRounds)
+//     {
+//         for (let i = 0; i < numberOfRounds; ++i)
+//         {
+//             const humanSelection = getHumanChoice();
+//             const computerSelection = getComputerChoice();
+
+//             playRound(humanSelection, computerSelection);
+//         }
+//     }
+//     // Show final result message 
+//     // based on the scores at the end of the game
+//     function declareAWinner()
+//     {
+//         if (humanScore > computerScore)
+//         {
+//             console.log("Congratulations! You won!");
+//         }
+//         else if (humanScore < computerScore)
+//         {
+//             console.log("You lost. Better luck next time!");
+//         }
+//         else
+//         {
+//             console.log("We have a tie!")
+//         }
+//         console.log(`Your score was ${humanScore}.`);
+//     }
+
+//     playNumberOfRounds(numberOfRounds);
+//     declareAWinner();
+// }
+
+// playGame(NUMBER_OF_ROUNDS);

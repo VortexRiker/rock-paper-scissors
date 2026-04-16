@@ -17,21 +17,21 @@ body
     height: 100vh;
     margin: 0;
     padding: 0;
-    display: flex;
     background-color: olive;
-    color: bisque;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;    
 }
 
 .content
 {
     margin: 20px;
     display:flex;
-    align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 75px;
 }
 
-.answer
+.choice
 {
     width: 250px;
     height:250px;
@@ -42,12 +42,12 @@ body
     font-size: 36px;
     font-weight: bold;
 }
-.answer:hover
+.choice:hover
 {
     background-color:rgb(175, 214, 1);
     font-size: 40px;
 }
-.answer:active
+.choice:active
 {
     background-color:rgb(117, 141, 8);
     font-size: 38px;
