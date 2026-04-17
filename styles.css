@@ -20,10 +20,23 @@ body
     background-color: olive;
     display: flex;
     flex-direction:column;
-    justify-content: center;    
+    justify-content: center;
+    align-items: center;
 }
 
-.content
+.result
+{
+    width: 750px;
+    padding: 50px;
+    border: solid, 5px, darkslategray;
+    background-color: rgb(181, 216, 135);
+    color: darkslategray;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.choices
 {
     margin: 20px;
     display:flex;
@@ -37,7 +50,7 @@ body
     height:250px;
     background-color:darkseagreen;
     border: 4px solid darkslategray;
-    border-radius: 15px;
+    border-radius: 50px;
     color: darkslategray;
     font-size: 36px;
     font-weight: bold;
