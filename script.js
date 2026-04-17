@@ -1,4 +1,14 @@
 const NUMBER_OF_ROUNDS = 5;
+let humanScore = 0;
+let computerScore = 0;
+let currentRound = 0;
+let resultMessage = "";
+
+const humanAnswers = [ "Rock", "Paper", "Scissors"];
+
+const resultContainer = document.querySelector(".result");
+const choices = document.querySelectorAll(".choice");
+
 
 // Return a random integer value from 1 to upperBound
 function getRandomInteger(upperBound)
@@ -25,12 +35,6 @@ function getChoice(choiceIndex)
 function getComputerChoice()
 {
     let choiceIndex = getRandomInteger(3);
-    return getChoice(choiceIndex);
-}
-// Return user's choice based on provided input
-function getHumanChoice()
-{
-    let choiceIndex = Number(prompt("Please enter your choice:\n1) Rock\n2) Paper\n3) Scissors", 1));
     return getChoice(choiceIndex);
 }
 
@@ -92,43 +96,97 @@ function getRoundMessage(result, humanChoice, computerChoice)
     return message;
 }
 
-// Play 1 round of game
-function playRound(humanChoice, computerChoice)
+//Show final result message 
+// based on the scores at the end of the game
+function declareAWinner()
 {
-    let result = getRoundResult(humanChoice, computerChoice);
-    let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
-    //setScore(result);
-    console.log(roundMessage);
+    let message = "";
+    if (humanScore > computerScore)
+    {
+        message = "Congratulations! You won!";
+    }
+    else
+    {
+        message = "You lost. Better luck next time!";
+    }
+
+    return message;
 }
 
-const choices = document.querySelectorAll(".choice");
-const humanAnswers = [ "Rock", "Paper", "Scissors"];
+// Increment score based on round result string
+function updateScore(result)
+{
+    if (result === "won")
+    {
+        ++humanScore;
+    }
+    else if (result === "lose")
+    {
+        ++computerScore;
+    }
+}
+
+function setResultMessage(message)
+{
+    if (humanScore > 5 || computerScore > 5)
+    {
+        message = declareAWinner();
+    }
+
+    resultContainer.textContent = message;
+}
+function setScoreMessage()
+{
+    let score = document.querySelector("#score")
+    if (!score)
+    {
+        score = document.createElement("div");
+        score.id = "score";
+        score.className = "result";
+        document.body.appendChild(score);
+    }
+    
+    score.textContent = `Your score: ${humanScore} \n Opponent score: ${computerScore}`
+}
+
+function isPlayable()
+{
+    return humanScore < 5 && computerScore < 5;
+}
+
+function playGame(humanChoice)
+{
+    if (isPlayable())
+    {
+        playRound(humanChoice);
+    }
+
+}
+
+// Play 1 round of game
+function playRound(humanChoice)
+{
+    const computerChoice = getComputerChoice();
+    let result = getRoundResult(humanChoice, computerChoice);
+    let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
+    updateScore(result);
+    setResultMessage(roundMessage);
+    setScoreMessage();
+}
+
 for(let i = 0; i < choices.length; ++i)
 {
-    choices[i].addEventListener("click",() => playRound(humanAnswers[i], getComputerChoice()));
+    choices[i].addEventListener("click",() => playGame(humanAnswers[i]));
 }
+
+
+
+
 
 // // Play game of "Rock Paper Scissors" against computer
 // // Consisting of numberOfRounds rounds specified by the caller
 // function playGame(numberOfRounds)
 // {
-//     let humanScore = 0;
-//     let computerScore = 0;
-
-//     // Increment score based on round result string
-//     function setScore(result)
-//     {
-//         if (result === "won")
-//         {
-//             ++humanScore;
-//         }
-//         else if (result === "lose")
-//         {
-//             ++computerScore;
-//         }
-//     }
-
-
 //     // Play numberOfRounds rounds of game
 //     // Just a wrapper around the loop
 //     function playNumberOfRounds(numbeOfRounds)
@@ -141,24 +199,7 @@ for(let i = 0; i < choices.length; ++i)
 //             playRound(humanSelection, computerSelection);
 //         }
 //     }
-//     // Show final result message 
-//     // based on the scores at the end of the game
-//     function declareAWinner()
-//     {
-//         if (humanScore > computerScore)
-//         {
-//             console.log("Congratulations! You won!");
-//         }
-//         else if (humanScore < computerScore)
-//         {
-//             console.log("You lost. Better luck next time!");
-//         }
-//         else
-//         {
-//             console.log("We have a tie!")
-//         }
-//         console.log(`Your score was ${humanScore}.`);
-//     }
+//     
 
 //     playNumberOfRounds(numberOfRounds);
 //     declareAWinner();
