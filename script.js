@@ -1,34 +1,28 @@
-const NUMBER_OF_ROUNDS = 5;
+const WINNING_SCORE = 5;
 let humanScore = 0;
 let computerScore = 0;
-let currentRound = 0;
-let resultMessage = "";
 
-const humanAnswers = [ "Rock", "Paper", "Scissors"];
+const initialState = document.body.innerHTML;
 
-const resultContainer = document.querySelector(".result");
-const choices = document.querySelectorAll(".choice");
-
-
-// Return a random integer value from 1 to upperBound
+// Return a random integer value from 0 to upperBound-1
 function getRandomInteger(upperBound)
 {
-    return Math.floor(Math.random() * upperBound + 1);
+    return Math.floor(Math.random() * upperBound);
 }
 // Return a string, containing a game choice,
-// corresponding to a passed integer
+// corresponding to a passed index
 function getChoice(choiceIndex)
 {
     switch(choiceIndex)
     {
-    case 1:
+    case 0:
         return "Rock";
-    case 2:
+    case 1:
         return "Paper";
-    case 3:
+    case 2:
         return "Scissors";
     default:
-        return "ERROR::RANDOM NUMBER IS OUT OF BOUNDS [1,3]";
+        return "ERROR::RANDOM NUMBER IS OUT OF BOUNDS [0,2]";
     }
 }
 // Return computer's choice
@@ -68,7 +62,7 @@ function generalCase(computerChoice, winningCase, losingCase)
     }
     else if (computerChoice === losingCase)
     {
-        return "lose";
+        return "lost";
     }
     else
     {
@@ -79,12 +73,12 @@ function generalCase(computerChoice, winningCase, losingCase)
 // Return a round result message, based on the result string
 function getRoundMessage(result, humanChoice, computerChoice)
 {
-    let message = `You ${result}! `;
+    let message = `You ${result} this round!\n\n`;
     if (result === "won")
     {
         message = message.concat(`${humanChoice} beats ${computerChoice}.`);
     }
-    else if (result === "lose")
+    else if (result === "lost")
     {
         message = message.concat(`${computerChoice} beats ${humanChoice}.`);
     }
@@ -103,11 +97,11 @@ function declareAWinner()
     let message = "";
     if (humanScore > computerScore)
     {
-        message = "Congratulations! You won!";
+        message = "Congratulations!\nYou won!";
     }
     else
     {
-        message = "You lost. Better luck next time!";
+        message = "You lost.\nBetter luck next time!";
     }
 
     return message;
@@ -120,89 +114,136 @@ function updateScore(result)
     {
         ++humanScore;
     }
-    else if (result === "lose")
+    else if (result === "lost")
     {
         ++computerScore;
     }
 }
-
-function setResultMessage(message)
+// Set round message based on the round results
+function setRoundMessage(result, humanChoice, computerChoice)
 {
-    if (humanScore > 5 || computerScore > 5)
-    {
-        message = declareAWinner();
-    }
-
-    resultContainer.textContent = message;
+    const resultContainer = document.querySelector(".result");
+    resultContainer.textContent = getRoundMessage(result, humanChoice, computerChoice);
 }
-function setScoreMessage()
+// Set Post-game message, based on the score 
+function setPostGameMessage()
+{
+    const resultContainer = document.querySelector(".result");
+    resultContainer.textContent = declareAWinner();
+}
+// Return score container. If there isn't one yet - create one and return it
+function getScoreContainer()
 {
     let score = document.querySelector("#score")
     if (!score)
     {
         score = document.createElement("div");
         score.id = "score";
-        score.className = "result";
+        score.classList.add("result");
         document.body.appendChild(score);
     }
-    
-    score.textContent = `Your score: ${humanScore} \n Opponent score: ${computerScore}`
+    return score;
 }
-
+// Sets score message. Actually does several things:
+// Creates score container if there isn't one yet
+// Updates the current score
+// Sets the score message based on the updated score
+function setScoreMessage(result)
+{
+    const score = getScoreContainer();
+    updateScore(result);
+    score.textContent = `Your score: ${humanScore}\n\nOpponent score: ${computerScore}`
+}
+// Check if player or computer won the game yet
 function isPlayable()
 {
-    return humanScore < 5 && computerScore < 5;
+    return humanScore < WINNING_SCORE && computerScore < WINNING_SCORE;
 }
-
-function playGame(humanChoice)
+// Remove game choice buttons from the DOM tree
+function removeChoiceButtons(buttonContainer)
 {
-    if (isPlayable())
-    {
-        playRound(humanChoice);
-    }
+    const buttons = document.querySelectorAll(".choice");
+    buttons.forEach((button) => buttonContainer.removeChild(button));
+}
+// Reset player and computer score back to 0
+function resetScore()
+{
+    humanScore = 0;
+    computerScore = 0;
+}
+// Revert game back to it's initial state
+function resetGame()
+{
+    document.body.innerHTML = initialState;
+    resetScore();
+    setButtonEvents();
+    setButtonContainerEvent();
+}
+// Add a button that resets the game
+function addPlayAgainButton(buttonContainer)
+{
+    const playAgainButton = document.createElement("button");
+    playAgainButton.textContent = "Try again?";
+    playAgainButton.classList.add("again");
+    playAgainButton.addEventListener("click", resetGame);
 
+    buttonContainer.appendChild(playAgainButton);
+}
+// Set button container to the post-game state
+// Which means all the game buttons are replaced with "Try again?" button 
+// that resets the game
+function setPostGameButtons()
+{
+    const buttonContainer = document.querySelector(".choices");
+    removeChoiceButtons(buttonContainer);
+    addPlayAgainButton(buttonContainer);
+}
+// Show post-game message and update button container to post-game state
+function showPostGame()
+{
+    setPostGameMessage();
+    setPostGameButtons();
 }
 
 // Play 1 round of game
-function playRound(humanChoice)
+function playRound(humanChoiceIndex)
 {
+    const humanChoice = getChoice(humanChoiceIndex);
     const computerChoice = getComputerChoice();
+
     let result = getRoundResult(humanChoice, computerChoice);
-    let roundMessage = getRoundMessage(result, humanChoice, computerChoice);
-    updateScore(result);
-    setResultMessage(roundMessage);
-    setScoreMessage();
+ 
+    setRoundMessage(result, humanChoice, computerChoice);
+    setScoreMessage(result);
 }
-
-for(let i = 0; i < choices.length; ++i)
+// Set game buttons events
+function setButtonEvents()
 {
-    choices[i].addEventListener("click",() => playGame(humanAnswers[i]));
+    const choices = document.querySelectorAll(".choice");
+    for(let i = 0; i < choices.length; ++i)
+    {
+        choices[i].addEventListener("click",() => playRound(i));
+    }
+}
+// Set button container event
+// This event is responsible for game transition
+// into the post-game state when winning conditions are met
+// It listens to the button clicks and checks them after the button event has fired
+// during bubbling stage
+function setButtonContainerEvent()
+{
+    const buttonContainer = document.querySelector(".choices");
+    buttonContainer.addEventListener("click", 
+    ()=>
+    {
+        if (isPlayable())
+        {
+            return;
+        }
+
+        showPostGame();
+    })
 }
 
-
-
-
-
-// // Play game of "Rock Paper Scissors" against computer
-// // Consisting of numberOfRounds rounds specified by the caller
-// function playGame(numberOfRounds)
-// {
-//     // Play numberOfRounds rounds of game
-//     // Just a wrapper around the loop
-//     function playNumberOfRounds(numbeOfRounds)
-//     {
-//         for (let i = 0; i < numberOfRounds; ++i)
-//         {
-//             const humanSelection = getHumanChoice();
-//             const computerSelection = getComputerChoice();
-
-//             playRound(humanSelection, computerSelection);
-//         }
-//     }
-//     
-
-//     playNumberOfRounds(numberOfRounds);
-//     declareAWinner();
-// }
-
-// playGame(NUMBER_OF_ROUNDS);
+setButtonEvents();
+setButtonContainerEvent();
